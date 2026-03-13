@@ -1,0 +1,74 @@
+/* YT Embed Redirect — ask popup */
+/* Scoped under #yte-ask-popup to avoid conflicting with YouTube's styles */
+
+#yte-ask-popup {
+  position: fixed !important;
+  z-index: 2147483647 !important;
+  background: #212121 !important;
+  border: 1px solid #3f3f3f !important;
+  border-radius: 12px !important;
+  padding: 12px 14px !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  min-width: 170px !important;
+  font-family: "Roboto", "Arial", sans-serif !important;
+  user-select: none !important;
+  pointer-events: all !important;
+  animation: yte-fade-in 0.12s ease !important;
+}
+
+@keyframes yte-fade-in {
+  from { opacity: 0; transform: scale(0.95) translateY(-4px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);    }
+}
+
+#yte-ask-popup .yte-popup-text {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: #f1f1f1 !important;
+  line-height: 1.3 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#yte-ask-popup .yte-popup-buttons {
+  display: flex !important;
+  gap: 8px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#yte-ask-popup .yte-btn {
+  flex: 1 !important;
+  padding: 6px 0 !important;
+  border-radius: 18px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  font-family: "Roboto", "Arial", sans-serif !important;
+  cursor: pointer !important;
+  border: none !important;
+  transition: background 0.1s ease, color 0.1s ease !important;
+  line-height: 1 !important;
+}
+
+#yte-ask-popup .yte-btn-yes {
+  background: #ff0000 !important;
+  color: #ffffff !important;
+}
+
+#yte-ask-popup .yte-btn-yes:hover {
+  background: #cc0000 !important;
+}
+
+#yte-ask-popup .yte-btn-no {
+  background: transparent !important;
+  color: #f1f1f1 !important;
+  border: 1px solid #3f3f3f !important;
+}
+
+#yte-ask-popup .yte-btn-no:hover {
+  background: #2e2e2e !important;
+}
+

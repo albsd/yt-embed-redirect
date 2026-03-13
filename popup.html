@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YT Embed Redirect</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+
+    <div class="header">
+      <svg class="yt-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#FF0000" d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.57 3.5 12 3.5 12 3.5s-7.57 0-9.38.55A3.02 3.02 0 0 0 .5 6.19C0 7.99 0 12 0 12s0 4.01.5 5.81a3.02 3.02 0 0 0 2.12 2.14C4.43 20.5 12 20.5 12 20.5s7.57 0 9.38-.55a3.02 3.02 0 0 0 2.12-2.14C24 16.01 24 12 24 12s0-4.01-.5-5.81z"/>
+        <polygon fill="#fff" points="9.75,15.02 15.5,12 9.75,8.98"/>
+      </svg>
+      <div class="header-text">
+        <span class="title">Embed Redirect</span>
+        <span class="subtitle">via yout-ube.com</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="options" id="options">
+      <div class="option" data-value="disabled">
+        <div class="option-content">
+          <span class="option-title">Disabled</span>
+          <span class="option-desc">Links open normally on YouTube</span>
+        </div>
+        <svg class="check-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#FF0000" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+        </svg>
+      </div>
+
+      <div class="option" data-value="enabled">
+        <div class="option-content">
+          <span class="option-title">Enabled for all</span>
+          <span class="option-desc">All video links open as embeds</span>
+        </div>
+        <svg class="check-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#FF0000" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+        </svg>
+      </div>
+
+      <div class="option" data-value="ask">
+        <div class="option-content">
+          <span class="option-title">Ask for every video</span>
+          <span class="option-desc">Prompts you before each redirect</span>
+        </div>
+        <svg class="check-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#FF0000" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="footer">
+      Redirects to <span class="footer-link">yout-ube.com</span>
+    </div>
+
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
