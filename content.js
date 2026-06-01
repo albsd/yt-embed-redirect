@@ -114,9 +114,150 @@ function showAskPopup(cursorX, cursorY, embedUrl, originalHref) {
     document.addEventListener('click', outsideClickHandler, { capture: true });
   }, 0);
 
-  // Dismiss on Escape
   document.addEventListener('keydown', onEscapeKey);
 }
+
+
+const CARD_SELECTORS = [
+  // new layout
+  'yt-lockup-view-model',
+  // old layout
+  'ytd-rich-item-renderer',
+  'ytd-video-renderer',
+  'ytd-compact-video-renderer',
+  'ytd-grid-video-renderer',
+];
+
+function injectIntoCard(card) {
+  if (card.dataset.yteBtn) return;
+
+  // new layout: yt-thumbnail-view-model |   old layout: ytd-thumbnail
+  const thumbEl = card.querySelector('yt-thumbnail-view-model') ||
+                  card.querySelector('ytd-thumbnail');
+  if (!thumbEl) return;
+
+  // Support both new layout link and old a#thumbnail
+  const a = card.querySelector('a[href*="/watch"]') ||
+            card.querySelector('ytd-thumbnail a#thumbnail[href]');
+  if (!a) return;
+
+  const href = a.getAttribute('href');
+  if (!getEmbedUrl(href)) return;
+
+  card.dataset.yteBtn = '1';
+  thumbEl.style.setProperty('position', 'relative', 'important');
+
+  const btn = document.createElement('button');
+  btn.className = 'yte-card-btn';
+  btn.textContent = 'Embed';
+  btn.title = 'Open as embed';
+
+  btn.addEventListener('click', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    window.open(getEmbedUrl(a.getAttribute('href')), '_blank');
+  }, { capture: true });
+
+  thumbEl.appendChild(btn);
+}
+
+// inject into ytd-video-preview (hover clip card) and re-inject each time it activates.
+function handlePreviewCard(preview) {
+  if (preview.hasAttribute('hidden')) {
+    const old = preview.querySelector('.yte-preview-btn');
+    if (old) old.remove();
+    delete preview.dataset.ytePreviewBtn;
+    return;
+  }
+  if (preview.dataset.ytePreviewBtn) return;
+
+  let href = null;
+  const ancestorCard = preview.closest(CARD_SELECTORS.join(','));
+  if (ancestorCard) {
+    const a = ancestorCard.querySelector('a[href*="/watch"]') ||
+              ancestorCard.querySelector('ytd-thumbnail a#thumbnail[href]');
+    if (a) href = a.getAttribute('href');
+  }
+
+  // fallback
+  if (!href) {
+    const directLink = preview.querySelector('a[href*="/watch"]');
+    if (directLink) href = directLink.getAttribute('href');
+  }
+
+  if (!href) {
+    for (const sel of CARD_SELECTORS) {
+      const hoveredCard = document.querySelector(`${sel}:hover`);
+      if (hoveredCard) {
+        const a = hoveredCard.querySelector('a[href*="/watch"]') ||
+                  hoveredCard.querySelector('ytd-thumbnail a#thumbnail[href]');
+        if (a) { href = a.getAttribute('href'); break; }
+      }
+    }
+  }
+
+  if (!href || !getEmbedUrl(href)) return;
+
+  preview.dataset.ytePreviewBtn = '1';
+  preview.style.setProperty('position', 'relative', 'important');
+
+  const btn = document.createElement('button');
+  btn.className = 'yte-card-btn yte-preview-btn';
+  btn.textContent = 'Embed';
+  btn.title = 'Open as embed';
+
+  const captured = href;
+  btn.addEventListener('click', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    window.open(getEmbedUrl(captured), '_blank');
+  }, { capture: true });
+
+  preview.appendChild(btn);
+}
+
+function processAll() {
+  CARD_SELECTORS.forEach(sel => {
+    const found = document.querySelectorAll(sel);
+    if (found.length) console.log(`[yte] ${sel}: ${found.length} found`);
+    found.forEach(injectIntoCard);
+  });
+  document.querySelectorAll('ytd-video-preview:not([hidden])').forEach(handlePreviewCard);
+
+  const btns = document.querySelectorAll('.yte-card-btn').length;
+  const marked = document.querySelectorAll('[data-yte-btn]').length;
+  console.log(`[yte] buttons injected: ${btns}, cards marked: ${marked}`);
+
+  // detect new-layout thumbnail elements
+  const newLayout = document.querySelectorAll('yt-lockup-view-model, yt-thumbnail-view-model');
+  if (newLayout.length) console.log(`[yte] NEW LAYOUT detected: yt-lockup-view-model/yt-thumbnail-view-model x${newLayout.length}`);
+}
+
+let _processTimer = null;
+const _cardObserver = new MutationObserver(mutations => {
+  let needsProcess = false;
+  for (const m of mutations) {
+    if (m.type === 'childList') { needsProcess = true; break; }
+    if (m.type === 'attributes' && m.target.tagName === 'YTD-VIDEO-PREVIEW') {
+      handlePreviewCard(m.target);
+    }
+  }
+  if (needsProcess) {
+    clearTimeout(_processTimer);
+    _processTimer = setTimeout(processAll, 150);
+  }
+});
+
+_cardObserver.observe(document.body, {
+  childList: true,
+  subtree: true,
+  attributes: true,
+  attributeFilter: ['hidden'],
+});
+
+processAll();
 
 // ── Main click interceptor ────────────────────────────────────────────────────
 

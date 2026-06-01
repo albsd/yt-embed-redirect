@@ -72,3 +72,43 @@
   background: #2e2e2e !important;
 }
 
+.yte-card-btn {
+  position: absolute !important;
+  bottom: 6px !important;
+  left: 6px !important;
+  z-index: 500 !important;
+  background: rgba(15, 15, 15, 0.82) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 3px 8px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  font-family: "Roboto", "Arial", sans-serif !important;
+  letter-spacing: 0.2px !important;
+  cursor: pointer !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.15s ease, background 0.1s ease !important;
+  user-select: none !important;
+  line-height: 1.5 !important;
+}
+
+yt-lockup-view-model:hover .yte-card-btn,
+ytd-rich-item-renderer:hover .yte-card-btn,
+ytd-video-renderer:hover .yte-card-btn,
+ytd-compact-video-renderer:hover .yte-card-btn,
+ytd-grid-video-renderer:hover .yte-card-btn {
+  opacity: 1 !important;
+  pointer-events: all !important;
+}
+
+.yte-card-btn:hover {
+  background: rgba(255, 255, 255, 0.18) !important;
+}
+
+.yte-preview-btn {
+  opacity: 1 !important;
+  pointer-events: all !important;
+}
+
